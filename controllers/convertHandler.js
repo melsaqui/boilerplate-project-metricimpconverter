@@ -6,59 +6,75 @@ function ConvertHandler() {
     var i;
     if (input[0]<'0' || input [i]>'9')
       return result;
+    var unit=this.getUnit(input);
+    if (unit !='' ){
+      if (input.toLowerCase()==unit.toLowerCase()){
+        result = 1
+        return result
+      }
+      input = input.toLowerCase().replace(unit.toLowerCase(),'')
+
+    }
+    //console.log(input)
     for (i=0; i<input.length;i++){
-        if ((input[i]>='0' && input [i]<='9') || (input [i]=='.')|| (input[i]=='/')){
+        if ((input[i]>='0' && input[i]<='9') || (input[i]=='.')|| (input[i]=='/')){
             result+=input[i];
         }
+        if (input[i]==' '){
+          result =''
+          return result
+        }
+      
+  
+       
     }
-    if (result == ''){
-      if (this.getUnit !=''){
-        result = '1'
-      }
-    }
-    else if(result.includes('/')){
+    if(result.includes('/')){
       result = result.split("/");
       if (result.length==2)
         result = parseFloat(result[0])/parseFloat(result[1]);
       else 
         result = ''
     }
+    if (result!='') 
+      result=parseFloat(result);
         //console.log(result);
 
-    return parseFloat(result);
+    return result;
   };
   
   this.getUnit = function(input) {
-    input = String(input);  //make sure string
+    input = String(input.toLowerCase());  //make sure string
     let result='';
     let resultTemp =''
     const validUnits = ['kg','km','mi','gal','L','lbs'];
     var i;
-    for (i=0; i<input.length;i++){
-        if ((input[i]>='a' && input [i]<='z')){
-            resultTemp+=input[i];
-        }
-        else if ((input[i]>='A' && input [i]<='Z')){
-          resultTemp+=input[i];
+    
+    for (i = 0; i<input.length;i++ ){
+      if ((input[i]>='a' && input [i]<='z')){
+        resultTemp += input[i]//+resultTemp      
       }
+      /*else if ((input[i]>='A' && input [i]<='Z')){
+        resultTemp += input[i]//+resultTemp
+      }*/
+
     }
+   
     var j;
+
     for (j=0;j<validUnits.length;j++){
       if(resultTemp==validUnits[j]){
         result= resultTemp;
         break;
       }
-      else if (resultTemp.toLowerCase()==validUnits[j]){
-        result = resultTemp.toLowerCase();
-        break;
-      }
+      
       else if(resultTemp.toUpperCase()=='L'){
         result = resultTemp.toUpperCase();
+       // console.log(result);
+
         break;
       }
-
     }
-    //console.log(result);
+    //console.log(result)
     return result;
     
   };
@@ -145,9 +161,9 @@ function ConvertHandler() {
   
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {
     let result;
-    
+    //console.log(initNum)
     //'3.1 miles converts to 4.98895 kilometers'
-    if(String(initNum)=='' && initUnit==''){
+    if((String(initNum)=='' || initNum==undefined || initNum==null) && initUnit==''){
       result= "invalid number and unit"
     }
     else if(String(initNum)==''){

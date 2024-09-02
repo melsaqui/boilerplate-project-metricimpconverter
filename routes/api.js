@@ -13,7 +13,7 @@ module.exports = function (app) {
     var result = convertHandler.convert(initNum,initUnit);
     var returnUnit = convertHandler.getReturnUnit(initUnit);
     var string = convertHandler.getString(initNum,initUnit,result,returnUnit);
-    if (!string.includes("Invalid"))
+    if (!string.toLowerCase().includes("invalid"))
       res.json({initNum:initNum, initUnit:initUnit, returnNum: result, returnUnit:returnUnit, string:string});
     else res.json(string);
   });
